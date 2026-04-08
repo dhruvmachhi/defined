@@ -122,7 +122,10 @@ button {
 }
 
 .search-shell {
-  background: rgba(255, 255, 255, 0.62);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
 }
 
 .lookup-form,
@@ -135,7 +138,17 @@ button {
 }
 
 .lookup-form {
-  align-items: stretch;
+  align-items: center;
+  padding: 4px;
+  background: rgba(255, 255, 255, 0.74);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  transition: border-color 140ms ease, background 140ms ease;
+}
+
+.lookup-form:focus-within {
+  background: rgba(255, 255, 255, 0.9);
+  border-color: rgba(37, 99, 235, 0.16);
 }
 
 .search-field {
@@ -159,17 +172,17 @@ button {
 }
 
 .field input {
-  min-height: 40px;
+  min-height: 42px;
   padding: 0 13px;
   border-radius: 10px;
-  font-size: 0.94rem;
+  font-size: 16px;
 }
 
 .field textarea {
   min-height: 78px;
   padding: 10px 12px;
   border-radius: var(--radius-md);
-  font-size: 0.93rem;
+  font-size: 16px;
   line-height: 1.45;
   resize: vertical;
 }
@@ -188,6 +201,14 @@ button {
 
 .search-field input {
   padding-left: 34px;
+  padding-right: 8px;
+  background: transparent;
+  box-shadow: none;
+}
+
+.search-field input:focus {
+  background: transparent;
+  box-shadow: none;
 }
 
 .search-icon {
@@ -244,7 +265,15 @@ button {
 }
 
 .compact-button {
-  min-width: 78px;
+  min-width: auto;
+  padding: 0 12px;
+  background: transparent;
+  color: var(--accent);
+  box-shadow: none;
+}
+
+.compact-button:hover {
+  background: var(--accent-soft);
 }
 
 .quiet-button {
@@ -573,22 +602,22 @@ button {
   left: 50%;
   bottom: max(12px, calc(8px + env(safe-area-inset-bottom)));
   transform: translateX(-50%);
-  width: min(396px, calc(100vw - 18px));
-  padding: 5px;
+  width: min(430px, calc(100vw - 18px));
+  padding: 6px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 4px;
+  gap: 6px;
   background: rgba(248, 248, 246, 0.94);
   border: 1px solid rgba(38, 38, 41, 0.08);
-  border-radius: 14px;
+  border-radius: 16px;
   box-shadow: none;
   backdrop-filter: blur(14px);
   z-index: 1000;
 }
 
 .tabbar-button {
-  min-height: 34px;
-  border-radius: 9px;
+  min-height: 42px;
+  border-radius: 11px;
   background: transparent;
   color: var(--muted);
 }
@@ -600,7 +629,7 @@ button {
 
 .tabbar-label {
   display: block;
-  font-size: 0.82rem;
+  font-size: 0.88rem;
   font-weight: 600;
 }
 
