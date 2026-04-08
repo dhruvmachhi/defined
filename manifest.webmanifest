@@ -1,0 +1,17 @@
+{
+  "name": "Word Shelf",
+  "short_name": "Word Shelf",
+  "description": "A minimal local-first word saver for definitions, notes, and examples.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f4efe7",
+  "theme_color": "#f4efe7",
+  "icons": [
+    {
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

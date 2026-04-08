@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta
+      name="description"
+      content="A minimal word-collector PWA for saving definitions, notes, and example sentences."
+    />
+    <meta name="theme-color" content="#f4f4f1" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Word Shelf" />
+    <link rel="manifest" href="manifest.webmanifest" />
+    <link rel="icon" href="icon.svg" type="image/svg+xml" />
+    <title>Word Shelf</title>
+    <link rel="preconnect" href="https://api.dictionaryapi.dev" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <section id="lookup-panel" class="panel is-active" data-view="lookup">
+        <header class="screen-head screen-head-lookup">
+          <p class="screen-kicker">Vocabulary</p>
+          <h1 class="screen-title">Look up</h1>
+        </header>
+
+        <section class="section-shell search-shell">
+          <form id="lookup-form" class="lookup-form">
+            <label class="field search-field">
+              <span class="search-icon" aria-hidden="true"></span>
+              <input
+                id="word-input"
+                name="word"
+                type="text"
+                inputmode="text"
+                autocapitalize="none"
+                autocomplete="off"
+                placeholder="Look up a word"
+                required
+              />
+            </label>
+            <button id="lookup-button" class="primary-button compact-button" type="submit">
+              Search
+            </button>
+          </form>
+
+          <p id="lookup-feedback" class="feedback" aria-live="polite"></p>
+        </section>
+
+        <form id="save-form" class="save-form" hidden>
+          <section class="section-shell preview-shell">
+            <div class="word-header">
+              <div class="word-heading">
+                <h2 id="preview-word" class="word-title">Word</h2>
+                <p id="phonetic-chip" class="phonetic-text" hidden></p>
+              </div>
+            </div>
+          </section>
+
+          <section class="section-shell">
+            <div class="section-head">
+              <h3 class="section-title">Definitions</h3>
+              <p class="section-meta">Optional</p>
+            </div>
+            <div id="definition-options" class="definition-options"></div>
+          </section>
+
+          <details id="notes-details" class="section-shell collapsible-shell">
+            <summary class="details-summary">Optional notes</summary>
+
+            <div class="details-body">
+              <label class="field">
+                <span>Your meaning</span>
+                <textarea
+                  id="custom-definition"
+                  name="customDefinition"
+                  rows="3"
+                  placeholder="In your own words"
+                ></textarea>
+              </label>
+
+              <label class="field">
+                <span>Example sentence</span>
+                <textarea
+                  id="custom-example"
+                  name="customExample"
+                  rows="3"
+                  placeholder="Use the word in a sentence"
+                ></textarea>
+              </label>
+            </div>
+          </details>
+
+          <details id="api-examples-wrap" class="section-shell collapsible-shell" hidden>
+            <summary class="details-summary">Dictionary examples</summary>
+            <div id="api-examples-list" class="example-options"></div>
+          </details>
+
+          <div class="save-actions">
+            <button id="save-button" class="primary-button" type="submit">Save</button>
+            <button id="cancel-button" class="ghost-button quiet-button" type="button">
+              Cancel
+            </button>
+          </div>
+        </form>
+      </section>
+
+      <section id="bookmarks-panel" class="panel" data-view="bookmarks" hidden>
+        <header class="screen-head">
+          <h1 class="screen-title">Saved</h1>
+          <p id="bookmark-count" class="screen-meta">0 saved</p>
+        </header>
+
+        <div id="bookmark-empty" class="section-shell empty-state">
+          <p>No saved words yet.</p>
+        </div>
+
+        <div id="bookmark-list" class="bookmark-list"></div>
+      </section>
+
+      <section id="backup-panel" class="panel" data-view="backup" hidden>
+        <header class="screen-head">
+          <h1 class="screen-title">Backup</h1>
+          <p class="screen-meta">Export or restore your saved words</p>
+        </header>
+
+        <section class="section-shell utility-shell">
+          <p class="support-copy">
+            Export your saved words as a JSON file, or import a previous backup.
+          </p>
+
+          <div class="backup-actions">
+            <button id="export-button" class="primary-button" type="button">Export</button>
+            <label class="ghost-button file-button" for="import-input">Import</label>
+            <input id="import-input" type="file" accept="application/json" hidden />
+          </div>
+
+          <p id="backup-feedback" class="feedback" aria-live="polite"></p>
+          <p class="support-note">Everything stays local unless you export it.</p>
+        </section>
+      </section>
+
+      <nav id="tabbar" class="tabbar" aria-label="Primary">
+        <button class="tabbar-button is-active" type="button" data-view-target="lookup">
+          <span class="tabbar-label">Lookup</span>
+        </button>
+        <button class="tabbar-button" type="button" data-view-target="bookmarks">
+          <span class="tabbar-label">Saved</span>
+        </button>
+        <button class="tabbar-button" type="button" data-view-target="backup">
+          <span class="tabbar-label">Backup</span>
+        </button>
+      </nav>
+    </main>
+
+    <template id="bookmark-template">
+      <details class="bookmark-item">
+        <summary class="bookmark-summary">
+          <h2 class="bookmark-word"></h2>
+          <p class="bookmark-date"></p>
+          <span class="bookmark-chevron" aria-hidden="true"></span>
+        </summary>
+
+        <div class="bookmark-body">
+          <div class="bookmark-actions">
+            <button class="inline-button edit-bookmark" type="button">Edit</button>
+            <button class="inline-button danger delete-bookmark" type="button">Delete</button>
+          </div>
+
+          <ul class="saved-definitions"></ul>
+
+          <div class="bookmark-section own-meaning-wrap" hidden>
+            <p class="bookmark-label">Your meaning</p>
+            <p class="own-meaning"></p>
+          </div>
+
+          <div class="bookmark-section own-example-wrap" hidden>
+            <p class="bookmark-label">Example sentence</p>
+            <p class="own-example"></p>
+          </div>
+
+          <div class="bookmark-section api-example-wrap" hidden>
+            <p class="bookmark-label">Dictionary examples</p>
+            <ul class="api-example-list"></ul>
+          </div>
+        </div>
+      </details>
+    </template>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
