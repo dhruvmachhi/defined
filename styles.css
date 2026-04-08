@@ -29,11 +29,12 @@
 html {
   min-height: 100%;
   background: #f3f2ee;
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
   margin: 0;
-  min-height: 100vh;
+  min-height: 100dvh;
   background: transparent;
   color: var(--text);
   font-family: var(--font-ui);
@@ -41,7 +42,8 @@ body {
 
 button,
 input,
-textarea {
+textarea,
+select {
   font: inherit;
 }
 
@@ -52,7 +54,10 @@ button {
 .app-shell {
   width: min(640px, calc(100vw - 24px));
   margin: 0 auto;
-  padding: max(14px, env(safe-area-inset-top)) 0 calc(88px + env(safe-area-inset-bottom));
+  padding:
+    calc(env(safe-area-inset-top) + 18px)
+    0
+    calc(96px + env(safe-area-inset-bottom));
 }
 
 .panel {
@@ -162,7 +167,8 @@ button {
 }
 
 .field input,
-.field textarea {
+.field textarea,
+select {
   width: 100%;
   border: 0;
   background: rgba(255, 255, 255, 0.64);
@@ -172,17 +178,17 @@ button {
 }
 
 .field input {
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 13px;
   border-radius: 10px;
-  font-size: 16px;
+  font-size: 16px !important;
 }
 
 .field textarea {
   min-height: 78px;
   padding: 10px 12px;
   border-radius: var(--radius-md);
-  font-size: 16px;
+  font-size: 16px !important;
   line-height: 1.45;
   resize: vertical;
 }
@@ -600,10 +606,10 @@ button {
 .tabbar {
   position: fixed;
   left: 50%;
-  bottom: max(12px, calc(8px + env(safe-area-inset-bottom)));
+  bottom: max(10px, calc(6px + env(safe-area-inset-bottom)));
   transform: translateX(-50%);
   width: min(430px, calc(100vw - 18px));
-  padding: 6px;
+  padding: 7px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 6px;
@@ -616,7 +622,7 @@ button {
 }
 
 .tabbar-button {
-  min-height: 42px;
+  min-height: 48px;
   border-radius: 11px;
   background: transparent;
   color: var(--muted);
@@ -652,7 +658,7 @@ button {
 @media (max-width: 640px) {
   .app-shell {
     width: min(100vw - 18px, 100%);
-    padding-top: max(10px, env(safe-area-inset-top));
+    padding-top: calc(env(safe-area-inset-top) + 16px);
   }
 
   .lookup-form,
